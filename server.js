@@ -5,14 +5,14 @@ const { verifyWebhook } = require('./utils/verifyWebhook');
 const routes = require('./routes');
 
 const app = express();
-const port = process.env.PORT || 3000;
-
 app.use(bodyParser.json());
 
-// Rota GET para verificação do webhook
+const port = process.env.PORT || 3000;
+
+// Rota GET -> verificação do webhook
 app.get('/webhook', verifyWebhook);
 
-// Rota POST para receber as mensagens
+// Rota POST -> recebe mensagens do WhatsApp
 app.post('/webhook', routes);
 
 app.listen(port, () => {

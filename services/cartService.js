@@ -1,13 +1,12 @@
 const { products } = require('./productService');
 
-// Exemplo simples de "banco" em memória
-const carts = {}; 
-// carts = {
-//   "<userPhone>": [{productId: '1', qty: 1}, ... ]
-// }
+// "banco" em memória para guardar carrinhos
+const carts = {};
+// Exemplo do formato:
+// carts["5511999999999"] = [ { productId: '2', qty: 1 }, ... ]
 
 function updateCart(userPhone, productId) {
-  // Se não passar productId, interpreta como "ver carrinho"
+  // Se não passar productId, apenas retorna o carrinho atual
   if (!productId) {
     if (!carts[userPhone] || carts[userPhone].length === 0) {
       return 'Seu carrinho está vazio.';
@@ -20,11 +19,13 @@ function updateCart(userPhone, productId) {
     return msg;
   }
 
-  // Caso tenha productId
+  // Se passar productId, adiciona ou incrementa no carrinho
   if (!carts[userPhone]) {
     carts[userPhone] = [];
   }
-  const existingItem = carts[userPhone].find(item => item.productId === productId);
+  const existingItem = carts[userPhone].find(
+    item => item.productId === productId
+  );
   if (existingItem) {
     existingItem.qty += 1;
   } else {
@@ -48,7 +49,7 @@ function finalizePurchase(userPhone) {
   });
   // Zera o carrinho
   carts[userPhone] = [];
-  return `Compra finalizada! Total: R$${total.toFixed(2)}. Obrigado!`;
+  return `Compra finalizada! Total: R$${total.toFixed(2)}.\nObrigado!`;
 }
 
 module.exports = {
