@@ -24,7 +24,7 @@ async function receiveMessage(req, res) {
       const phoneNumberId = changes.metadata.phone_number_id;
 
       for (const msg of messages) {
-        const from = msg.from; // ex: "5511999999999"
+        const from = msg.from;
 
         // 1) Se for clique de botão interativo
         if (msg.type === 'interactive' && msg.interactive.button_reply) {
