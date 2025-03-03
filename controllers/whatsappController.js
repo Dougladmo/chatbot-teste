@@ -5,9 +5,6 @@ const { updateCart, finalizePurchase } = require('../services/cartService');
 const token = process.env.WHATSAPP_TOKEN;
 const apiUrl = 'https://graph.facebook.com/v15.0';
 
-/**
- * Função principal que processa o POST de /webhook (mensagens do WhatsApp)
- */
 async function receiveMessage(req, res) {
   try {
     const body = req.body;
@@ -25,6 +22,9 @@ async function receiveMessage(req, res) {
 
       for (const msg of messages) {
         const from = msg.from;
+
+        console.log(from)
+        console.log(changes.messages)
 
         // 1) Se for clique de botão interativo
         if (msg.type === 'interactive' && msg.interactive.button_reply) {
