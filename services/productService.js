@@ -1,22 +1,34 @@
-const products = [
-  { id: '1', name: 'Produto A', price: 10.0 },
-  { id: '2', name: 'Produto B', price: 20.0 },
-  { id: '3', name: 'Produto C', price: 30.0 }
-];
+const { products } = require('./products');
 
-function handleTextMessage() {
-  // Retorna a lista de produtos
-  const productList = products
-    .map(p => `${p.id} - ${p.name} (R$${p.price})`)
-    .join('\n');
-
-  return (
-    `Lista de produtos:\n${productList}\n\n` +
-    `Para adicionar ao carrinho, digite: "adicionar <id>"`
-  );
+function getAllProducts() {
+  return Object.values(products).flat();
 }
 
-module.exports = {
-  handleTextMessage,
-  products
-};
+async function sendCatalogImage(phoneNumberId, to, imageUrl, caption) {
+  try {
+    const responseData = {
+      messaging_product: 'whatsapp',
+      to: to,
+      type: 'image',
+      image: {
+        link: imageUrl,   
+        caption: caption  
+      }
+    };
+
+    await axios.post(
+      `https://graph.facebook.com/v15.0/${phoneNumberId}/messages`,
+      responseData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Seu token da Cloud API
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  } catch (error) {
+    console.error('Erro ao enviar imagem do catálogo:', error?.response?.data || error.message);
+  }
+}
+
+module.exports = { getAllProducts, sendCatalogImage, products };
